@@ -32,6 +32,10 @@ checkInForm.addEventListener("submit", function (event) {
     return;
   }
 
+  // Show the check-in information in the browser console
+  console.log("Name:", name);
+  console.log("Team:", teamLabel);
+
   // Increase total attendance
   totalAttendees = totalAttendees + 1;
 
