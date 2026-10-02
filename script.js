@@ -1,74 +1,40 @@
-// Variables to track attendance and team counts
-let totalAttendees = 0;
-const maxGoal = 50;
-
-let waterCount = 0;
-let zeroCount = 0;
-let powerCount = 0;
-
-// Get references to HTML elements
-const checkInForm = document.getElementById("checkInForm");
-const attendeeNameInput = document.getElementById("attendeeName");
+// Attendance is kept in memory for this page session.
+const attendanceGoal = 50;
+const teamCounts = { water: 0, zero: 0, power: 0 };
+const form = document.getElementById("checkInForm");
+const nameInput = document.getElementById("attendeeName");
 const teamSelect = document.getElementById("teamSelect");
-const attendeeCountElement = document.getElementById("attendeeCount");
-const progressBarElement = document.getElementById("progressBar");
-const greetingElement = document.getElementById("greeting");
-const waterCountElement = document.getElementById("waterCount");
-const zeroCountElement = document.getElementById("zeroCount");
-const powerCountElement = document.getElementById("powerCount");
+const greeting = document.getElementById("greeting");
+const progressBar = document.getElementById("progressBar");
+const progress = progressBar.parentElement;
 
-// Listen for form submission
-checkInForm.addEventListener("submit", function (event) {
-  // Prevent the page from reloading
+form.addEventListener("submit", function (event) {
   event.preventDefault();
+  const name = nameInput.value.trim();
+  const team = teamSelect.value;
 
-  // Get the attendee name and selected team
-  const name = attendeeNameInput.value.trim();
-  const selectedTeam = teamSelect.value;
-  const teamLabel = teamSelect.options[teamSelect.selectedIndex].text;
-
-  // Make sure both fields have a value
-  if (!name || !selectedTeam) {
+  if (!name || !Object.hasOwn(teamCounts, team)) {
+    greeting.textContent = "Enter an attendee name and choose a team to check in.";
+    greeting.className = "error-message";
+    greeting.style.display = "block";
+    (!name ? nameInput : teamSelect).focus();
     return;
   }
 
-  // Show the check-in information in the browser console
+  const teamLabel = teamSelect.selectedOptions[0].textContent;
   console.log("Name:", name);
   console.log("Team:", teamLabel);
 
-  // Increase total attendance
-  totalAttendees = totalAttendees + 1;
-
-  // Increase the selected team's count
-  if (selectedTeam === "water") {
-    waterCount = waterCount + 1;
-    waterCountElement.textContent = waterCount;
-  } else if (selectedTeam === "zero") {
-    zeroCount = zeroCount + 1;
-    zeroCountElement.textContent = zeroCount;
-  } else if (selectedTeam === "power") {
-    powerCount = powerCount + 1;
-    powerCountElement.textContent = powerCount;
-  }
-
-  // Show the updated total attendance
-  attendeeCountElement.textContent = totalAttendees;
-
-  // Calculate the percentage of the attendance goal completed
-  const progressPercentage = Math.min(
-    (totalAttendees / maxGoal) * 100,
-    100
-  );
-
-  // Update the progress bar
-  progressBarElement.style.width = `${progressPercentage}%`;
-
-  // Show a personalized success message
-  greetingElement.textContent = `Welcome, ${name}! You have checked in with ${teamLabel}.`;
-  greetingElement.className = "success-message";
-  greetingElement.style.display = "block";
-
-  // Reset the form for the next attendee
-  checkInForm.reset();
-  attendeeNameInput.focus();
+  teamCounts[team] += 1;
+  const total = teamCounts.water + teamCounts.zero + teamCounts.power;
+  document.getElementById(`${team}Count`).textContent = teamCounts[team];
+  document.getElementById("attendeeCount").textContent = total;
+  progressBar.style.width = `${Math.min(total / attendanceGoal * 100, 100)}%`;
+  progress.setAttribute("aria-valuenow", Math.min(total, attendanceGoal));
+  progress.setAttribute("aria-valuetext", `${total} attendees checked in; goal ${attendanceGoal}`);
+  greeting.textContent = `Welcome, ${name}! You have checked in with ${teamLabel}.`;
+  greeting.className = "success-message";
+  greeting.style.display = "block";
+  form.reset();
+  nameInput.focus();
 });
