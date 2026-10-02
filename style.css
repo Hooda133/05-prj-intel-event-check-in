@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background-color: #f5f5f5;
   color: #333;
   line-height: 1.6;
@@ -69,8 +69,8 @@ body {
 
 .hero p {
   font-size: 22px;
-  letter-spacing: 1px;
-  font-weight: 300;
+  letter-spacing: 0.35px;
+  font-weight: 400;
   color: white;
 }
 
@@ -278,7 +278,8 @@ button:hover {
 
 .team-stats h2 {
   color: #64748b;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 600;
   margin-bottom: 20px;
 }
 
@@ -315,8 +316,8 @@ button:hover {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   color: #334155;
 }
 
@@ -382,7 +383,7 @@ button:hover {
 
 /* Labels stay attached to their controls at every screen size. */
 .field { flex: 1 1 0; min-width: 0; }
-.field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #475569; }
+.field label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 6px; color: #475569; }
 .form-label { font-size: 20px; font-weight: 600; padding-left: 0; }
 .team-count { font-size: 28px; font-weight: 700; color: #003c71; }
 button { gap: 8px; }
