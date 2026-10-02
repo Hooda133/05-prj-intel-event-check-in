@@ -27,9 +27,9 @@ body {
 .hero {
   background: linear-gradient(
       135deg,
-      rgba(0, 153, 219, 0.9) 0%,
-      rgba(0, 104, 181, 0.9) 50%,
-      rgba(0, 60, 116, 0.9) 100%
+      rgba(0, 110, 171, 0.97) 0%,
+      rgba(0, 88, 155, 0.97) 50%,
+      rgba(0, 60, 116, 0.97) 100%
     ),
     url("img/bg.jpg");
   background-size: cover;
