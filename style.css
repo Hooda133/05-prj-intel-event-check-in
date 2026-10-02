@@ -55,7 +55,6 @@ body {
   font-size: 46px;
   font-weight: 700;
   line-height: 1.2;
-  text-transform: uppercase;
   margin-bottom: 16px;
   letter-spacing: -0.5px;
   color: white;
@@ -292,27 +291,59 @@ button:hover {
 .team-card {
   padding: 15px;
   border-radius: 12px;
+  border-top: 3px solid var(--team-accent);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
-/* Team card colors */
 .team-card.water {
+  --team-accent: #0071c5;
   background-color: #e8f7fc;
 }
 .team-card.zero {
+  --team-accent: #16834a;
   background-color: #ecfdf3;
 }
 .team-card.power {
+  --team-accent: #c46512;
   background-color: #fff7ed;
 }
 
 .team-name {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 15px;
   font-weight: 500;
-  color: #475569;
+  color: #334155;
 }
+
+.team-icon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: var(--team-accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.inline-icon {
+  width: 21px;
+  height: 21px;
+  display: inline-block;
+  vertical-align: -4px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.attendance-icon { color: #0071c5; }
 
 /* Mobile responsive */
 @media (max-width: 900px) {
