@@ -32,7 +32,16 @@ form.addEventListener("submit", function (event) {
   progressBar.style.width = `${Math.min(total / attendanceGoal * 100, 100)}%`;
   progress.setAttribute("aria-valuenow", Math.min(total, attendanceGoal));
   progress.setAttribute("aria-valuetext", `${total} attendees checked in; goal ${attendanceGoal}`);
-  greeting.textContent = `Welcome, ${name}! You have checked in with ${teamLabel}.`;
+  const hour = new Date().getHours();
+  let timeGreeting = "Good evening";
+
+  if (hour < 12) {
+    timeGreeting = "Good morning";
+  } else if (hour < 17) {
+    timeGreeting = "Good afternoon";
+  }
+
+  greeting.textContent = `${timeGreeting}, ${name}! Welcome to the Intel Sustainability Summit. You have checked in with ${teamLabel}.`;
   greeting.className = "success-message";
   greeting.style.display = "block";
   form.reset();
