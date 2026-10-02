@@ -113,19 +113,19 @@ form.addEventListener("submit", function (event) {
   }
 
   const teamLabel = teamSelect.selectedOptions[0].textContent;
-  console.log("Name:", name);
-  console.log("Team:", teamLabel);
+  attendees.push({
+    id: nextAttendeeId,
+    name: name,
+    team: team,
+    teamLabel: teamLabel,
+  });
+  nextAttendeeId += 1;
 
-  teamCounts[team] += 1;
-  const total = teamCounts.water + teamCounts.zero + teamCounts.power;
-  document.getElementById(`${team}Count`).textContent = teamCounts[team];
-  document.getElementById("attendeeCount").textContent = total;
-  progressBar.style.width = `${Math.min(total / attendanceGoal * 100, 100)}%`;
-  progress.setAttribute("aria-valuenow", Math.min(total, attendanceGoal));
-  progress.setAttribute("aria-valuetext", `${total} attendees checked in; goal ${attendanceGoal}`);
-  greeting.textContent = `Welcome, ${name}! You have checked in with ${teamLabel}.`;
-  greeting.className = "success-message";
-  greeting.style.display = "block";
+  renderAttendance();
+  showMessage(
+    `Welcome, ${name}! You have checked in with ${teamLabel}.`,
+    "success-message",
+  );
   form.reset();
   nameInput.focus();
 });
