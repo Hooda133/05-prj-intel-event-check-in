@@ -293,6 +293,55 @@ button:hover {
   color: #003c71;
 }
 
+.celebration {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+  padding: 20px 24px;
+  border: 2px solid #00a3d9;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #e8faff 0%, #d9f4e8 100%);
+  color: #003c71;
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(0, 113, 197, 0.16);
+  animation: celebration-arrives 0.7s ease both;
+}
+
+.celebration::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.75) 45%,
+    transparent 70%
+  );
+  transform: translateX(-100%);
+  animation: celebration-shine 1.4s ease 0.4s both;
+}
+
+@keyframes celebration-arrives {
+  0% {
+    opacity: 0;
+    transform: scale(0.94) translateY(10px);
+  }
+  70% {
+    transform: scale(1.02) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes celebration-shine {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 /* Footer */
 .footer {
   text-align: center;
@@ -580,12 +629,26 @@ a:focus-visible {
     letter-spacing: 0;
   }
 
+  .celebration {
+    font-size: 18px;
+    padding: 16px;
+  }
+
   .attendee-list-header {
     align-items: stretch;
     flex-direction: column;
   }
 
+  .attendee-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   .reset-button {
+    width: 100%;
+  }
+
+  .remove-button {
     width: 100%;
   }
 }
@@ -594,6 +657,7 @@ a:focus-visible {
   *::before,
   *::after {
     transition: none !important;
+    animation: none !important;
   }
 }
 

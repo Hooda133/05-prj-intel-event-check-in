@@ -1,5 +1,6 @@
 // Attendance is kept in memory for this page session.
 const attendanceGoal = 50;
+const attendanceStorageKey = "intel-sustainability-attendance";
 const teamCounts = { water: 0, zero: 0, power: 0 };
 const attendees = [];
 let nextAttendeeId = 1;
@@ -7,15 +8,79 @@ const form = document.getElementById("checkInForm");
 const nameInput = document.getElementById("attendeeName");
 const teamSelect = document.getElementById("teamSelect");
 const greeting = document.getElementById("greeting");
+const celebration = document.getElementById("celebration");
 const progressBar = document.getElementById("progressBar");
 const progress = progressBar.parentElement;
 const attendeeList = document.getElementById("attendeeList");
 const resetButton = document.getElementById("resetButton");
+let goalCelebrationShown = false;
 
 function showMessage(message, messageClass) {
   greeting.textContent = message;
   greeting.className = messageClass;
   greeting.style.display = "block";
+}
+
+function showGoalCelebration() {
+  let winningTeam = "";
+  let winningCount = -1;
+
+  Object.keys(teamCounts).forEach(function (team) {
+    if (teamCounts[team] > winningCount) {
+      const teamOption = teamSelect.querySelector(`option[value="${team}"]`);
+      winningTeam = teamOption.textContent.replace(/^Team\s+/i, "");
+      winningCount = teamCounts[team];
+    }
+  });
+
+  celebration.textContent = `🎉 Goal Reached! Congratulations, Team ${winningTeam}!`;
+  celebration.hidden = false;
+  goalCelebrationShown = true;
+}
+
+function saveAttendance() {
+  const attendanceData = {
+    total: attendees.length,
+    teams: teamCounts,
+    attendees: attendees,
+    goalCelebrationShown: goalCelebrationShown,
+  };
+
+  localStorage.setItem(attendanceStorageKey, JSON.stringify(attendanceData));
+}
+
+function loadAttendance() {
+  const savedAttendance = localStorage.getItem(attendanceStorageKey);
+
+  if (!savedAttendance) {
+    return;
+  }
+
+  try {
+    const attendanceData = JSON.parse(savedAttendance);
+
+    if (!Array.isArray(attendanceData.attendees)) {
+      return;
+    }
+
+    attendanceData.attendees.forEach(function (attendee) {
+      attendees.push(attendee);
+    });
+
+    nextAttendeeId =
+      attendees.reduce(function (highestId, attendee) {
+        return Math.max(highestId, attendee.id);
+      }, 0) + 1;
+    goalCelebrationShown = attendanceData.goalCelebrationShown === true;
+    renderAttendance();
+
+    if (attendees.length >= attendanceGoal && !goalCelebrationShown) {
+      showGoalCelebration();
+      saveAttendance();
+    }
+  } catch (error) {
+    return;
+  }
 }
 
 function renderAttendance() {
@@ -77,6 +142,7 @@ function renderAttendance() {
 
       attendees.splice(attendeeIndex, 1);
       renderAttendance();
+      saveAttendance();
       showMessage(`${attendee.name} was removed.`, "success-message");
     });
 
@@ -126,6 +192,12 @@ form.addEventListener("submit", function (event) {
     `Welcome, ${name}! You have checked in with ${teamLabel}.`,
     "success-message",
   );
+
+  if (!goalCelebrationShown && attendees.length >= attendanceGoal) {
+    showGoalCelebration();
+  }
+
+  saveAttendance();
   form.reset();
   nameInput.focus();
 });
@@ -137,8 +209,14 @@ resetButton.addEventListener("click", function () {
 
   attendees.length = 0;
   nextAttendeeId = 1;
+  localStorage.removeItem(attendanceStorageKey);
   renderAttendance();
   form.reset();
   greeting.style.display = "none";
+  celebration.hidden = true;
+  celebration.textContent = "";
+  goalCelebrationShown = false;
   nameInput.focus();
 });
+
+loadAttendance();
